@@ -1,0 +1,67 @@
+[
+  {
+    "index": 0,
+    "status": "success",
+    "result": {
+      "Response Relevance": {"score": 5, "reason": "The response accurately addresses the user's core question about machine learning, clearly explaining the basic concept in alignment with the knowledge base."},
+      "Citation Accuracy": {"score": 5, "reason": "Fully based on the knowledge base content with no hallucinations or misquotations. All key terms and definitions are accurately matched."},
+      "Scope Completeness": {"score": 5, "reason": "Comprehensively covers the definition, core features, and application areas of machine learning without omitting any important aspects."},
+      "Instruction Following": {"score": 5, "reason": "Strictly follows the output format requirements with reasonable scores and a clear, complete structure."},
+      "Readability and Naturalness": {"score": 5, "reason": "The response is fluent and natural, with concise and easy-to-understand language. The logical structure is well-organized."},
+      "Overall Summary": "Excellent. The response is accurate, complete, and well-formatted, comprehensively covering the core content of the user's question."
+    }
+  },
+  {
+    "index": 1,
+    "status": "success",
+    "result": {
+      "Response Relevance": {"score": 3, "reason": "The response addresses the difference between deep learning and machine learning, but some content deviates from the user's core comparative angle."},
+      "Citation Accuracy": {"score": 4, "reason": "Most content is based on the knowledge base, but one description about neural network layers does not fully align with the reference."},
+      "Scope Completeness": {"score": 3, "reason": "Covers the main differences but omits important comparative dimensions such as training data requirements and computational resources."},
+      "Instruction Following": {"score": 4, "reason": "Generally follows the output format, but the overall summary lacks improvement suggestions."},
+      "Readability and Naturalness": {"score": 3, "reason": "The response structure is clear but some sentences are too long, affecting reading fluency."},
+      "Overall Summary": "Above average. Core content is correct, but both depth and breadth have room for improvement."
+    }
+  },
+  {
+    "index": 2,
+    "status": "empty",
+    "result": {
+      "Response Relevance": {"score": 1, "reason": "Response is empty"},
+      "Citation Accuracy": {"score": 1, "reason": "Response is empty"},
+      "Scope Completeness": {"score": 1, "reason": "Response is empty"},
+      "Instruction Following": {"score": 1, "reason": "Response is empty"},
+      "Readability and Naturalness": {"score": 1, "reason": "Response is empty"},
+      "Overall Summary": "Response is empty, unable to evaluate"
+    }
+  },
+  {
+    "index": 3,
+    "status": "failed",
+    "result": {}
+  },
+  {
+    "index": 4,
+    "status": "success",
+    "result": {
+      "Response Relevance": {"score": 4, "reason": "The response accurately explains the core concept of natural language processing and is highly relevant to the user's question, though it lacks specific application examples."},
+      "Citation Accuracy": {"score": 5, "reason": "Fully based on the knowledge base content. All definitions and descriptions are accurate with no hallucinated content."},
+      "Scope Completeness": {"score": 4, "reason": "Covers the basic definition and main goals of NLP but does not mention specific technical challenges and application domains."},
+      "Instruction Following": {"score": 5, "reason": "Strictly follows the output format with reasonable scores and thorough justifications."},
+      "Readability and Naturalness": {"score": 5, "reason": "The English expression is natural and fluent, with clear logic and accurate terminology usage. Good reading experience."},
+      "Overall Summary": "Good. The response is accurate and natural, but could be enriched in terms of coverage."
+    }
+  },
+  {
+    "index": 5,
+    "status": "success",
+    "result": {
+      "Response Relevance": {"score": 1, "reason": "The response is too brief, merely repeating the basic definition of transfer learning without delving into its core concepts and application value."},
+      "Citation Accuracy": {"score": 2, "reason": "Roughly based on the knowledge base, but the overly simplified expression omits important details and may cause misunderstanding."},
+      "Scope Completeness": {"score": 1, "reason": "The response is only one sentence, severely lacking coverage of transfer learning types, methods, and application scenarios."},
+      "Instruction Following": {"score": 2, "reason": "The format is too simplistic and does not provide detailed explanations and examples as required."},
+      "Readability and Naturalness": {"score": 1, "reason": "The content is too brief, lacking necessary explanation and context. Poor reading experience."},
+      "Overall Summary": "Poor. The response is too short to meet the user's basic need to understand transfer learning."
+    }
+  }
+]
