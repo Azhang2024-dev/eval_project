@@ -1,0 +1,37 @@
+{
+  "file": "D:/data/en_llm_sampled_100.xlsx",
+  "language": "en",
+  "layout": "auto",
+  "max_chunks": 0,
+  "max_chunk_chars": 0,
+  "models": [
+    "azure/gpt-5.4",
+    "alibaba/qwen3.7-max",
+    "bytedance/deepseek-v4-pro"
+  ],
+  "model_protocols": {
+    "azure/gpt-5.4": "chat_completions",
+    "alibaba/qwen3.7-max": "chat_completions",
+    "bytedance/deepseek-v4-pro": "chat_completions"
+  },
+  "model_response_modes": {
+    "azure/gpt-5.4": "text",
+    "alibaba/qwen3.7-max": "text",
+    "bytedance/deepseek-v4-pro": "text"
+  },
+  "workers": 10,
+  "test": 0,
+  "thinking": true,
+  "thinking_effort": "high",
+  "review": true,
+  "doc_dirs": [
+    "D:/path/to/knowledge-base"
+  ],
+  "review_models": [
+    "azure/gpt-5.4",
+    "alibaba/qwen3.7-max",
+    "bytedance/deepseek-v4-pro"
+  ],
+  "threshold": 3.0,
+  "merge": false
+}

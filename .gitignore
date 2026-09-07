@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+.venv/
+
+# Codegraph index
+.codegraph/
+
+# Tool metadata
+.omo/
+
+# Runtime checkpoints (generated during evaluation runs)
+_checkpoints/
+*_checkpoint_*.json
+
+# OS
+Thumbs.db
+.DS_Store
