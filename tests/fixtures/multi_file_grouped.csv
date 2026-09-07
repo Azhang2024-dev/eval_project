@@ -1,0 +1,4 @@
+query,filename,搜索结果,score,大模型问答结果
+What is X?,a.pdf,chunk text from a,0.9,answer text
+,b.pdf,chunk text from b,0.8,
+,c.pdf,chunk text from c,0.7,
