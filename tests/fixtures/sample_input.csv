@@ -1,0 +1,7 @@
+query,filename,搜索结果,score,大模型问答结果
+什么是机器学习？,ml_intro.pdf,机器学习是人工智能的一个分支，它使计算机能够从数据中学习和改进。,0.95,机器学习是人工智能的一个分支，使计算机能够从数据中学习并不断改进性能。
+深度学习与机器学习的区别是什么？,dl_vs_ml.pdf,深度学习是机器学习的一个子集，使用多层神经网络进行特征提取和表示学习。,0.85,深度学习是机器学习的一个子集，它使用多层神经网络来自动学习特征表示，在图像识别和自然语言处理等领域表现优异。
+什么是强化学习？,rl_intro.pdf,强化学习是机器学习的一种范式，通过智能体与环境交互来学习最优策略。,0.90,
+什么是监督学习？,,监督学习使用标注数据训练模型，是机器学习的主要范式之一。,0.88,监督学习是一种使用标注数据训练模型的方法，模型通过学习输入到输出的映射关系来进行预测。
+What is natural language processing?,nlp_intro.pdf,Natural language processing is a subfield of artificial intelligence that focuses on the interaction between computers and human language.,0.92,Natural language processing (NLP) is a subfield of AI that enables computers to understand interpret and generate human language.
+What is transfer learning?,transfer_learning.pdf,Transfer learning is a machine learning technique where knowledge gained from one task is applied to a related task.,0.75,Transfer learning is reusing a model trained on one task for another related task.
