@@ -103,7 +103,7 @@ def _meta(language: str) -> LanguageMeta:
 def score_headers(language: str) -> list[tuple[str, str]]:
     """Return the 5 ``(score_header, reason_header)`` tuples for *language*.
 
-    Each header is formed as ``\"{dim}-{label}\"`` where *label* is the
+    Each header is formed as ``"{dim}-{label}"`` where *label* is the
     score/reason label from ``LanguageMeta``.
     """
     meta = _meta(language)
@@ -193,7 +193,7 @@ def weighted_from_score_dict(
 def summarize(values: list[float]) -> dict[str, float]:
     """Return summary statistics for *values*.
 
-    Returns ``{\"mean\", \"median\", \"min\", \"max\", \"range\", \"stdev\"}``.
+    Returns ``{"mean", "median", "min", "max", "range", "stdev"}``.
     For ``n ≤ 1``, ``stdev = 0`` (``statistics.stdev`` would raise).
     Values are exact (not rounded).
     """
