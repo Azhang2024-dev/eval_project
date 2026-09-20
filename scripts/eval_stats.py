@@ -249,19 +249,30 @@ def band_distribution(weighted_values: list[float]) -> dict[str, int]:
 SCORED_STATUSES: tuple[str, ...] = ("success", "empty")
 """Result statuses that carry dimension scores."""
 
+FAILED_PENALTY_SCORE: float = 0.0
+"""Penalty for ``failed`` / non-scored rows in the all-rows (headline) mean.
+
+Honesty policy (P2.5): the primary / headline mean includes every indexed row.
+Non-scored statuses (``failed``, etc.) contribute ``FAILED_PENALTY_SCORE``
+(0.0) to the denominator. A scored-only mean is published alongside and must
+be explicitly labeled so it cannot be mistaken for the headline.
+"""
+
 
 def collect_weighted_scores(
     results: list[dict[str, Any]],
     language: str,
 ) -> list[tuple[int, float]]:
-    """Return ``(index, weighted_score)`` pairs for scored rows.
+    """Return ``(index, weighted_score)`` pairs for *scored-only* rows.
 
     Pairs are aligned by the explicit ``index`` field on each result item, so
     ``failed`` rows (which carry no scores) neither shift nor mask the scores
     of other rows — the position-based ``zip`` that caused badcase
-    misalignment is gone. Only ``success`` and ``empty`` rows are included,
-    matching the previous stats loops. Missing/invalid dimension scores are
-    treated as ``0`` (same semantics as the legacy loops).
+    misalignment is gone. Only ``success`` and ``empty`` rows are included.
+    Missing/invalid dimension scores are treated as ``0``.
+
+    For the headline all-rows mean (failed → 0), use ``collect_all_row_scores``
+    / ``mean_report`` instead.
     """
     pairs: list[tuple[int, float]] = []
     for item in results:
@@ -276,6 +287,78 @@ def collect_weighted_scores(
         values = collect_dim_values(result, language)
         pairs.append((int(index), weighted_from_values(values)))
     return pairs
+
+
+def collect_all_row_scores(
+    results: list[dict[str, Any]],
+    language: str,
+    *,
+    failed_penalty: float = FAILED_PENALTY_SCORE,
+) -> list[tuple[int, float]]:
+    """Return ``(index, weighted_score)`` for every indexed row.
+
+    Scored rows (``success`` / ``empty``) contribute their weighted score
+    (invalid dims → 0 within the sum). Non-scored rows contribute
+    ``failed_penalty`` (default 0.0). Rows without ``index`` are skipped.
+    """
+    pairs: list[tuple[int, float]] = []
+    for item in results:
+        index = item.get("index")
+        if index is None:
+            continue
+        if item.get("status") in SCORED_STATUSES:
+            result = item.get("result") or {}
+            if not isinstance(result, dict):
+                result = {}
+            values = collect_dim_values(result, language)
+            pairs.append((int(index), weighted_from_values(values)))
+        else:
+            pairs.append((int(index), float(failed_penalty)))
+    return pairs
+
+
+def mean_report(
+    results: list[dict[str, Any]],
+    language: str,
+    *,
+    failed_penalty: float = FAILED_PENALTY_SCORE,
+) -> dict[str, Any]:
+    """Publish both headline all-rows mean and scored-only mean.
+
+    Keys:
+      - ``mean`` / ``mean_all_rows``: primary headline (failed → penalty)
+      - ``mean_scored_only``: success/empty only (must be labeled as such)
+      - ``n_all``, ``n_scored``, ``n_failed``
+      - ``failed_penalty_policy``: human-readable policy string
+    """
+    all_pairs = collect_all_row_scores(results, language, failed_penalty=failed_penalty)
+    scored_pairs = collect_weighted_scores(results, language)
+    all_vals = [s for _, s in all_pairs]
+    scored_vals = [s for _, s in scored_pairs]
+    n_failed = sum(
+        1
+        for item in results
+        if item.get("status") not in SCORED_STATUSES and item.get("index") is not None
+    )
+    mean_all = summarize(all_vals)["mean"] if all_vals else 0.0
+    mean_scored = summarize(scored_vals)["mean"] if scored_vals else 0.0
+    return {
+        "mean": mean_all,
+        "mean_all_rows": mean_all,
+        "mean_scored_only": mean_scored,
+        "n_all": len(all_vals),
+        "n_scored": len(scored_vals),
+        "n_failed": n_failed,
+        "failed_penalty": failed_penalty,
+        "failed_penalty_policy": (
+            f"failed/non-scored rows contribute {failed_penalty} to the "
+            "all-rows (headline) mean denominator; scored-only mean excludes them"
+        ),
+        "all_row_scores": all_vals,
+        "scored_only_scores": scored_vals,
+        "all_row_pairs": all_pairs,
+        "scored_only_pairs": scored_pairs,
+    }
 
 
 def badcase_entries(
