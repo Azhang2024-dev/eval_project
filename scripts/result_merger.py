@@ -586,7 +586,7 @@ def write_merged_workbook(merged: MergedResults, output_path: str) -> str:
     stats_headers = ["模型", "协议", "语言", "metadata状态", "评测总数", "成功", "回答为空", "失败/未完成"]
     for dimension in dimensions:
         stats_headers.extend([f"{dimension}-均值", f"{dimension}-中位数", f"{dimension}-标准差", f"{dimension}-最低", f"{dimension}-最高"])
-    stats_headers.extend(["Weighted Average-均值", "Weighted Average-最低", "Weighted Average-最高", "Badcase数量", "Badcase率"])
+    stats_headers.extend(["Weighted Average-均值(全部行失败计0)", "Weighted Average-均值(仅计分)", "Weighted Average-最低(仅计分)", "Weighted Average-最高(仅计分)", "Badcase数量", "Badcase率(仅计分母)", "failed_penalty_policy"])
     for column, header in enumerate(stats_headers, start=1):
         _write_header(stats_sheet, stats_row, column, header)
     stats_row += 1
@@ -605,7 +605,21 @@ def write_merged_workbook(merged: MergedResults, output_path: str) -> str:
             median_value = round(statistics.median(dimension_values), 4) if dimension_values else ""
             values.extend([mean_value, median_value, std_value, min_value, max_value])
         badcases = sum(value < BADCASE_THRESHOLD for value in weighted)
-        values.extend([round(statistics.mean(weighted), 4) if weighted else "", min(weighted) if weighted else "", max(weighted) if weighted else "", badcases, f"{badcases / len(weighted) * 100:.1f}%" if weighted else "0.0%"])
+        # P2.5 honesty: headline mean treats failed rows as 0; scored-only mean labeled separately.
+        n_failed = sum(record.status not in {"success", "empty"} for record in records)
+        all_row_scores = list(weighted) + [0.0] * n_failed
+        mean_all = round(statistics.mean(all_row_scores), 4) if all_row_scores else ""
+        mean_scored = round(statistics.mean(weighted), 4) if weighted else ""
+        policy = "failed/non-scored rows contribute 0.0 to all-rows headline mean; scored-only mean excludes them"
+        values.extend([
+            mean_all,
+            mean_scored,
+            min(weighted) if weighted else "",
+            max(weighted) if weighted else "",
+            badcases,
+            f"{badcases / len(weighted) * 100:.1f}%" if weighted else "0.0%",
+            policy,
+        ])
         for column, value in enumerate(values, start=1):
             stats_sheet.cell(row=stats_row, column=column, value=value)
         stats_row += 1
