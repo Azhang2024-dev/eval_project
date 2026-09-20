@@ -5,6 +5,7 @@ from scripts.eval_stats import (
     badcase_entries,
     band_distribution,
     collect_weighted_scores,
+    mean_report,
     summarize,
 )
 
@@ -70,17 +71,21 @@ class ReportGenerator:
                 print(f"  {dim_key:<30} {avg:>6.2f} {med:>7.1f} {std:>7.2f}")
         print()
 
-        if weighted_scores:
-            ws_stats = summarize(weighted_scores)
-            avg_w = ws_stats["mean"]
-            max_w = ws_stats["max"]
-            min_w = ws_stats["min"]
+        # P2.5: headline mean includes failed as 0; scored-only published alongside.
+        mr = mean_report(self.results, self.language)
+        all_vals = mr["all_row_scores"]
+        scored_vals = mr["scored_only_scores"]
+        if all_vals or scored_vals:
             print("-" * 60)
             print("  加权均分分布")
             print("-" * 60)
-            print(f"  均值: {avg_w:.2f}")
-            print(f"  最高: {max_w:.2f}")
-            print(f"  最低: {min_w:.2f}")
+            print(f"  均值(全部行,失败计0): {mr['mean_all_rows']:.2f}  n={mr['n_all']}  (failed={mr['n_failed']})")
+            print(f"  均值(仅成功/空答):     {mr['mean_scored_only']:.2f}  n={mr['n_scored']}")
+            print(f"  政策: {mr['failed_penalty_policy']}")
+            if scored_vals:
+                ws_stats = summarize(scored_vals)
+                print(f"  最高(仅计分): {ws_stats['max']:.2f}")
+                print(f"  最低(仅计分): {ws_stats['min']:.2f}")
             print()
 
             bands = band_distribution(weighted_scores)
@@ -101,7 +106,7 @@ class ReportGenerator:
             print("  Badcase列表（加权均分 < 3.0）")
             print("-" * 60)
             if badcases:
-                print(f"  Badcase率: {badcase_rate:.1f}% ({len(badcases)}/{len(weighted_scores)})")
+                print(f"  Badcase率(仅计分母): {badcase_rate:.1f}% ({len(badcases)}/{len(weighted_scores)})")
                 print()
                 for idx, w in badcases:
                     item = next((r for r in self.results if r.get("index") == idx), None)
